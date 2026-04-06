@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 import json
+import os
 
 app = Flask("List of products")
 CORS(app)
@@ -16,7 +17,6 @@ def getProductsList():
 
 @app.route("/getdealers/<product>")
 def getDealers(product):
-  products = []
   ret = False
   with open("products.json", "r") as prodfile:
     data = json.load(prodfile)
@@ -27,7 +27,6 @@ def getDealers(product):
   if ret == False:
     return {"message":"Could not find dealers for this product"}
 
-if __name__=="__main__":
-    app.run(debug=True) 
-    # When no port is specified, starts at default port 5000
-
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
